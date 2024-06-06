@@ -1,195 +1,1036 @@
 {
-  "openapi": "3.0.1",
+  "openapi": "3.0.0",
   "info": {
-    "title": "OpenAPI Plant Store",
-    "description": "A sample API that uses a plant store as an example to demonstrate features in the OpenAPI specification",
-    "license": {
-      "name": "MIT"
-    },
-    "version": "1.0.0"
+    "title": "Rest APIs",
+    "version": "1.0.0",
+    "description": "These APIs provide all the necessary routes to integrate the nfts and tokens ecosystems.",
+    "schemes": [
+      "http",
+      "https"
+    ],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ]
   },
-  "servers": [
+  "tags": [
     {
-      "url": "http://sandbox.mintlify.com"
-    }
-  ],
-  "security": [
+      "name": "health",
+      "description": "Health check endpoints."
+    },
     {
-      "bearerAuth": []
+      "name": "nfts",
+      "description": "The endpoints for NFTs handle."
+    },
+    {
+      "name": "collections",
+      "description": "Collections endpoints."
+    },
+    {
+      "name": "market",
+      "description": "NFTs transactions ."
+    },
+    {
+      "name": "eniato-balance",
+      "description": "NFTs bought and balance."
+    },
+    {
+      "name": "networks",
+      "description": "Networks available."
     }
   ],
   "paths": {
-    "/plants": {
+    "/v1/nfts/getNFT": {
       "get": {
-        "description": "Returns all plants from the system that the user has access to",
+        "tags": [
+          "nfts"
+        ],
+        "description": "Gets a specific NFT.",
         "parameters": [
           {
-            "name": "limit",
+            "name": "assetIdentifier",
             "in": "query",
-            "description": "The maximum number of results to return",
+            "description": "The identifier of the NFT.",
+            "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "string"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Plant response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Plant"
-                  }
-                }
-              }
-            }
+            "description": "The NFT details."
           },
-          "400": {
-            "description": "Unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "description": "Creates a new plant in the store",
-        "requestBody": {
-          "description": "Plant to add to the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewPlant"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "plant response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Plant"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+          "412": {
+            "description": "Not possible to get the NFT details."
           }
         }
       }
     },
-    "/plants/{id}": {
+    "/v1/nfts/getNFTs": {
+      "get": {
+        "tags": [
+          "nfts"
+        ],
+        "description": "Gets a list of NFT.",
+        "parameters": [
+          {
+            "name": "categoryId",
+            "in": "query",
+            "description": "The category of the NFT.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "isHome",
+            "in": "query",
+            "description": "Indicates if its a nft for home exibition. It returns the collections object together with each NFT.",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "isAdmin",
+            "in": "query",
+            "description": "Indicates if it should return all the list of NFTs, with enabled or not.",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "isCollectionProfile",
+            "in": "query",
+            "description": "Indicates if its called from a collection profile screen, showing also the packages related to the collectionId",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "The limit.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "The offset.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "description": "The name of the asset.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "collectionId",
+            "in": "query",
+            "description": "The id of the collection related to the assets.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The NFTs list."
+          },
+          "412": {
+            "description": "Not possible to get the NFTs list."
+          }
+        }
+      }
+    },
+    "/v1/nfts/createAsset": {
+      "post": {
+        "tags": [
+          "nfts"
+        ],
+        "description": "Creates a NFT",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "condition",
+            "description": "Inputs to create the NFT",
+            "schema": {
+              "type": "object",
+              "required": [
+                "name",
+                "description",
+                "characteristics",
+                "price",
+                "category_id",
+                "type",
+                "quantity",
+                "photos",
+                "collectionId"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "characteristics": {
+                  "type": "object"
+                },
+                "price": {
+                  "type": "string"
+                },
+                "category_id": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                },
+                "quantity": {
+                  "type": "string"
+                },
+                "photos": {
+                  "type": "object"
+                },
+                "collectionId": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Created the NFT."
+          },
+          "412": {
+            "description": "Not possible to create the NFT."
+          }
+        }
+      }
+    },
+    "/v1/nfts/sendNFTAdmin": {
+      "post": {
+        "tags": [
+          "nfts"
+        ],
+        "description": "Sends a NFT to an user",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "condition",
+            "description": "Inputs to send the NFT to the user",
+            "schema": {
+              "type": "object",
+              "required": [
+                "userId",
+                "price"
+              ],
+              "properties": {
+                "userId": {
+                  "type": "string"
+                },
+                "price": {
+                  "type": "string"
+                },
+                "externalLink": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "NFT sent."
+          },
+          "412": {
+            "description": "Not possible to send the NFT."
+          }
+        }
+      }
+    },
+    "/v1/nfts/updateAsset": {
+      "put": {
+        "tags": [
+          "nfts"
+        ],
+        "description": "Updates a NFT",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "condition",
+            "description": "Inputs to create the NFT",
+            "schema": {
+              "type": "object",
+              "required": [
+                "id"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "characteristics": {
+                  "type": "string"
+                },
+                "price": {
+                  "type": "string"
+                },
+                "category_id": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                },
+                "quantity": {
+                  "type": "string"
+                },
+                "photos": {
+                  "type": "string"
+                },
+                "collectionId": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated the NFT."
+          },
+          "412": {
+            "description": "Not possible to update the NFT."
+          }
+        }
+      }
+    },
+    "/v1/nfts/": {
       "delete": {
-        "description": "Deletes a single plant based on the ID supplied",
+        "tags": [
+          "nfts"
+        ],
+        "description": "Delete a specific NFT.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "The identifier of the NFT.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "NFT soft deleted."
+          },
+          "412": {
+            "description": "Not possible to soft delete the NFT."
+          }
+        }
+      }
+    },
+    "/v1/nfts/resellAsset": {
+      "post": {
+        "tags": [
+          "nfts"
+        ],
+        "description": "Sends a NFT to resell",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "condition",
+            "description": "Inputs to send the NFT to resell",
+            "schema": {
+              "type": "object",
+              "required": [
+                "userId",
+                "collectionId",
+                "nftId",
+                "resellValue"
+              ],
+              "properties": {
+                "userId": {
+                  "type": "string"
+                },
+                "collectionId": {
+                  "type": "string"
+                },
+                "nftId": {
+                  "type": "string"
+                },
+                "resellValue": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "NFT sent."
+          },
+          "412": {
+            "description": "Not possible to send the NFT."
+          }
+        }
+      }
+    },
+    "/v1/nfts/estimateSendNFTAdmin": {
+      "post": {
+        "tags": [
+          "nfts"
+        ],
+        "description": "Estimates Sends a NFT to an user",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "condition",
+            "description": "Inputs to send the NFT to the user",
+            "schema": {
+              "type": "object",
+              "required": [
+                "userId",
+                "price"
+              ],
+              "properties": {
+                "userId": {
+                  "type": "string"
+                },
+                "price": {
+                  "type": "string"
+                },
+                "externalLink": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "NFT sent."
+          },
+          "412": {
+            "description": "Not possible to send the NFT."
+          }
+        }
+      }
+    },
+    "/v1/collections/getAllCollections": {
+      "get": {
+        "tags": [
+          "collections"
+        ],
+        "description": "Gets all collections.",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "description": "The collection name.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "networkId",
+            "in": "query",
+            "description": "The network id (name).",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "The limit to filter the list.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "The offset to filter the list.",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "collections list."
+          },
+          "412": {
+            "description": "Not possible to get the collections list."
+          }
+        }
+      }
+    },
+    "/v1/collections/getCollection": {
+      "get": {
+        "tags": [
+          "collections"
+        ],
+        "description": "Gets one specific Collections.",
+        "parameters": [
+          {
+            "name": "collectionIdentifier",
+            "in": "query",
+            "description": "Collections identifier.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Collections data."
+          },
+          "412": {
+            "description": "Not possible to get the Collections."
+          }
+        }
+      }
+    },
+    "/v1/collections/getCollectionStatistics": {
+      "get": {
+        "tags": [
+          "collections"
+        ],
+        "description": "Gets one specific Collections statistics, with details of owners, network, etc.",
+        "parameters": [
+          {
+            "name": "conditionIdentifier",
+            "in": "query",
+            "description": "Collections identifier.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Collections data."
+          },
+          "412": {
+            "description": "Not possible to get the Collections."
+          }
+        }
+      }
+    },
+    "/v1/collections/getAllCollectionsStatistics": {
+      "get": {
+        "tags": [
+          "collections"
+        ],
+        "description": "Gets all Collections statistics.",
+        "parameters": [
+          {
+            "name": "sortRule",
+            "in": "query",
+            "description": "Sort order.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "MORE_BOUGHTS",
+                "MORE_OWNERS",
+                "BIGGEST_MARKET_PRICE"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Collections statistics data."
+          },
+          "412": {
+            "description": "Not possible to get the Collections statistics."
+          }
+        }
+      }
+    },
+    "/v1/collections/collection/{id}": {
+      "delete": {
+        "tags": [
+          "collections"
+        ],
+        "description": "Deletes one Collections.",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "ID of plant to delete",
+            "description": "Collections internal id.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int64"
+              "type": "string"
             }
           }
         ],
         "responses": {
-          "204": {
-            "description": "Plant deleted",
-            "content": {}
+          "200": {
+            "description": "Collections deleted."
           },
-          "400": {
-            "description": "unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
+          "412": {
+            "description": "Collections not deleted."
+          }
+        }
+      }
+    },
+    "/v1/collections/createCollection": {
+      "post": {
+        "tags": [
+          "collections"
+        ],
+        "description": "Creates a Collections",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "condition",
+            "description": "Inputs to create the Collections",
+            "schema": {
+              "type": "object",
+              "required": [
+                "name",
+                "description",
+                "network_id",
+                "photo",
+                "cover_photo",
+                "payer_wallet"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "network_id": {
+                  "type": "string"
+                },
+                "payer_wallet": {
+                  "type": "string"
+                },
+                "photo": {
+                  "type": "string"
+                },
+                "contract_url": {
+                  "type": "string"
+                },
+                "cover_photo": {
+                  "type": "string"
+                },
+                "creator_institution": {
+                  "type": "string"
+                },
+                "creator_institution_url": {
+                  "type": "string"
                 }
               }
             }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Created the Collections."
+          },
+          "412": {
+            "description": "Not possible to create the Collections."
+          }
+        }
+      }
+    },
+    "/v1/collections/updateCollections": {
+      "put": {
+        "tags": [
+          "collections"
+        ],
+        "description": "Update a given Collections",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "placeHolder",
+            "description": "Inputs to update the Collections",
+            "schema": {
+              "type": "object",
+              "required": [
+                "id"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "photo": {
+                  "type": "string"
+                },
+                "contract_url": {
+                  "type": "string"
+                },
+                "cover_photo": {
+                  "type": "string"
+                },
+                "price": {
+                  "type": "string"
+                },
+                "creator_institution": {
+                  "type": "string"
+                },
+                "creator_institution_url": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Collections updated."
+          },
+          "412": {
+            "description": "Not possible to update the Collections."
+          }
+        }
+      }
+    },
+    "/v1/collections/estimateCreateCollection": {
+      "post": {
+        "tags": [
+          "collections"
+        ],
+        "description": "Creates a Collections",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "condition",
+            "description": "Inputs to create the Collections",
+            "schema": {
+              "type": "object",
+              "required": [
+                "name",
+                "description",
+                "network_id",
+                "photo",
+                "cover_photo",
+                "payer_wallet"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "network_id": {
+                  "type": "string"
+                },
+                "payer_wallet": {
+                  "type": "string"
+                },
+                "photo": {
+                  "type": "string"
+                },
+                "contract_url": {
+                  "type": "string"
+                },
+                "cover_photo": {
+                  "type": "string"
+                },
+                "creator_institution": {
+                  "type": "string"
+                },
+                "creator_institution_url": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Created the Collections."
+          },
+          "412": {
+            "description": "Not possible to create the Collections."
+          }
+        }
+      }
+    },
+    "/v1/healthcheck": {
+      "get": {
+        "tags": [
+          "health"
+        ],
+        "description": "Get a message to check system healthy.",
+        "produces": "A helth check message.",
+        "responses": {
+          "200": {
+            "description": "the Health Check Message."
+          }
+        }
+      }
+    },
+    "/v1/market/sendNFTs": {
+      "post": {
+        "tags": [
+          "market"
+        ],
+        "description": "Send a nft to an user",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "asset",
+            "description": "Inputs to send the NFT",
+            "schema": {
+              "type": "object",
+              "required": [
+                "userId",
+                "customerIdToTransferTo",
+                "assetId",
+                "nftId",
+                "blockchainId"
+              ],
+              "properties": {
+                "userId": {
+                  "type": "string",
+                  "description": "The user that will send the NFT"
+                },
+                "customerIdToTransferTo": {
+                  "type": "string",
+                  "description": "The user that will receive the NFT"
+                },
+                "assetId": {
+                  "type": "number",
+                  "description": "The NFT general ID"
+                },
+                "nftId": {
+                  "type": "number",
+                  "description": "The ID of the user NFT that will be send."
+                },
+                "blockchainId": {
+                  "type": "string",
+                  "description": "The NFT identifier on blockchain, in case of resale selected."
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Created the asset."
+          },
+          "412": {
+            "description": "Not possible to create the asset."
+          }
+        }
+      }
+    },
+    "/v1/market/balance": {
+      "get": {
+        "tags": [
+          "market"
+        ],
+        "description": "Gets the authenticated user balance information, with the list of NFTs.",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "description": "The user to have the balance returned",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Balance information returned successfully"
+          }
+        }
+      }
+    },
+    "/v1/market/categories": {
+      "get": {
+        "tags": [
+          "market"
+        ],
+        "description": "Gets the categories.",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Return the list of categories available in the system"
+          }
+        }
+      }
+    },
+    "/v1/market/buyNFT": {
+      "post": {
+        "tags": [
+          "eniato-balance"
+        ],
+        "description": "Send balance to user",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "asset",
+            "description": "Inputs to create the balance",
+            "schema": {
+              "type": "object",
+              "required": [
+                "userId",
+                "monetaryAmount",
+                "assetId"
+              ],
+              "properties": {
+                "userId": {
+                  "type": "string",
+                  "description": "The user to allocate the money."
+                },
+                "assetId": {
+                  "type": "string",
+                  "description": "The NFT purchased."
+                },
+                "monetaryAmount": {
+                  "type": "number",
+                  "description": "The amount of NFTs bought."
+                },
+                "nftId": {
+                  "type": "string",
+                  "description": "The NFT identifier, in case of resale selected."
+                },
+                "blockchainId": {
+                  "type": "string",
+                  "description": "The NFT identifier on blockchain, in case of resale selected."
+                },
+                "hash": {
+                  "type": "string",
+                  "description": "The hash on the blockchain, if any."
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Created the asset."
+          },
+          "412": {
+            "description": "Not possible to create the asset."
+          }
+        }
+      }
+    },
+    "/v1/networks/getNetworks": {
+      "get": {
+        "tags": [
+          "networks"
+        ],
+        "description": "Gets a list of networks.",
+        "responses": {
+          "200": {
+            "description": "The networks list."
+          },
+          "412": {
+            "description": "Not possible to get the networks list."
           }
         }
       }
     }
   },
-  "components": {
-    "schemas": {
-      "Plant": {
-        "required": [
-          "name"
-        ],
-        "type": "object",
-        "properties": {
-          "name": {
-            "description": "The name of the plant",
-            "type": "string"
-          },
-          "tag": {
-            "description": "Tag to specify the type",
-            "type": "string"
-          }
-        }
-      },
-      "NewPlant": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Plant"
-          },
-          {
-            "required": [
-              "id"
-            ],
-            "type": "object",
-            "properties": {
-              "id": {
-                "description": "Identification number of the plant",
-                "type": "integer",
-                "format": "int64"
-              }
-            }
-          }
-        ]
-      },
-      "Error": {
-        "required": [
-          "error",
-          "message"
-        ],
-        "type": "object",
-        "properties": {
-          "error": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "message": {
-            "type": "string"
-          }
-        }
-      }
-    },
-    "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer"
-      }
-    }
-  }
+  "components": {}
 }
