@@ -1,11 +1,11 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "name": "Axia Digital Solutions",
+  "name": "Axia",
   "logo": {
     "dark": "/logo/logo-axia.png",
     "light": "/logo/logo-axia.png"
   },
-  "favicon": "/favicon.svg",
+  "favicon": "/logo/logo-axia.png",
   "colors": {
     "primary": "#265AB2",
     "light": "#4FACEE",
