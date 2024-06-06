@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "name": "Documentação Axia Digital Solutions",
+  "name": "Axia Digital Solutions",
   "logo": {
     "dark": "/logo/logo-axia.png",
     "light": "/logo/logo-axia.png"
@@ -22,8 +22,8 @@
     }
   ],
   "topbarCtaButton": {
-    "name": "Dashboard",
-    "url": "https://dashboard.mintlify.com"
+    "name": "Ambiente de Teste",
+    "url": "https://midas-homolog.axiadigitalsolutions.net"
   },
   "tabs": [
     {
@@ -33,40 +33,28 @@
   ],
   "anchors": [
     {
-      "name": "Documentation",
+      "name": "Soluções",
       "icon": "book-open-cover",
-      "url": "https://mintlify.com/docs"
+      "url": "https://www.axiadigitalsolutions.com/solutions"
     },
     {
-      "name": "Community",
+      "name": "Preços",
       "icon": "slack",
-      "url": "https://mintlify.com/community"
-    },
-    {
-      "name": "Blog",
-      "icon": "newspaper",
-      "url": "https://mintlify.com/blog"
+      "url": "https://www.axiadigitalsolutions.com/pricing"
     }
   ],
   "navigation": [
     {
-      "group": "Get Started",
+      "group": "Comece aqui",
       "pages": [
         "introduction",
-        "quickstart",
-        "development"
+        "quickstart"
       ]
     },
     {
       "group": "Essentials",
       "pages": [
-        "pt/about/licenses",
-        "essentials/code",
-        "essentials/homepage_information",
-        "essentials/images",
-        "essentials/settings",
-        "essentials/navigation",
-        "essentials/reusable-snippets"
+        "pt/about/licenses"
       ]
     },
     {
