@@ -2,23 +2,23 @@
   "$schema": "https://mintlify.com/schema.json",
   "name": "Documentação Axia Digital Solutions",
   "logo": {
-    "dark": "/logo/dark.svg",
-    "light": "/logo/light.svg"
+    "dark": "/logo/logo-axia.png",
+    "light": "/logo/logo-axia.png"
   },
   "favicon": "/favicon.svg",
   "colors": {
-    "primary": "#0D9373",
-    "light": "#07C983",
-    "dark": "#0D9373",
+    "primary": "#265AB2",
+    "light": "#4FACEE",
+    "dark": "#265AB2",
     "anchors": {
-      "from": "#0D9373",
-      "to": "#07C983"
+      "from": "#265AB2",
+      "to": "#4FACEE"
     }
   },
   "topbarLinks": [
     {
-      "name": "Support",
-      "url": "mailto:hi@mintlify.com"
+      "name": "Suporte",
+      "url": "mailto:suporte@axiadigitalsolutions.com"
     }
   ],
   "topbarCtaButton": {
