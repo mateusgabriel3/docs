@@ -60,10 +60,9 @@
     {
       "group": "Essentials",
       "pages": [
-        "essentials/markdown",
+        "pt/about/licenses",
         "essentials/code",
-                "essentials/homepage_information",
-
+        "essentials/homepage_information",
         "essentials/images",
         "essentials/settings",
         "essentials/navigation",
@@ -86,8 +85,6 @@
     }
   ],
   "footerSocials": {
-    "x": "https://x.com/mintlify",
-    "github": "https://github.com/mintlify",
-    "linkedin": "https://www.linkedin.com/company/mintsearch"
+    "linkedin": "https://www.linkedin.com/company/axiaglobal"
   }
 }
