@@ -62,6 +62,8 @@
       "pages": [
         "essentials/markdown",
         "essentials/code",
+                "essentials/homepage_information",
+
         "essentials/images",
         "essentials/settings",
         "essentials/navigation",
